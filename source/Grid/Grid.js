@@ -15,7 +15,6 @@ import type {
   CellCache,
   StyleCache,
 } from './types';
-import type {AnimationTimeoutId} from '../utils/requestAnimationTimeout';
 
 import * as React from 'react';
 import cn from 'classnames';
@@ -30,10 +29,6 @@ import updateScrollIndexHelper from './utils/updateScrollIndexHelper';
 import defaultCellRangeRenderer from './defaultCellRangeRenderer';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 import {polyfill} from 'react-lifecycles-compat';
-import {
-  requestAnimationTimeout,
-  cancelAnimationTimeout,
-} from '../utils/requestAnimationTimeout';
 
 /**
  * Specifies the number of milliseconds during which to disable pointer events while a scroll is in progress.
@@ -313,7 +308,7 @@ class Grid extends React.PureComponent<Props, State> {
   _initialScrollTop: number;
   _initialScrollLeft: number;
 
-  _disablePointerEventsTimeoutId: ?AnimationTimeoutId;
+  _disablePointerEventsTimeoutId: ?TimeoutID;
 
   _styleCache: StyleCache = {};
   _cellCache: CellCache = {};
@@ -416,9 +411,9 @@ class Grid extends React.PureComponent<Props, State> {
     scrollTop: scrollTopParam = 0,
   }: ScrollPosition) {
     // On iOS, we can arrive at negative offsets by swiping past the start.
-    // To prevent flicker here, we make playing in the negative offset zone cause nothing to happen.
+    // To prevent flicker here, we treat negative values as if they are zero
     if (scrollTopParam < 0) {
-      return;
+      scrollTopParam = 0;
     }
 
     // Prevent pointer events from interrupting a smooth scroll
@@ -806,7 +801,7 @@ class Grid extends React.PureComponent<Props, State> {
 
   componentWillUnmount() {
     if (this._disablePointerEventsTimeoutId) {
-      cancelAnimationTimeout(this._disablePointerEventsTimeoutId);
+      clearTimeout(this._disablePointerEventsTimeoutId);
     }
   }
 
@@ -1259,10 +1254,10 @@ class Grid extends React.PureComponent<Props, State> {
     const {scrollingResetTimeInterval} = this.props;
 
     if (this._disablePointerEventsTimeoutId) {
-      cancelAnimationTimeout(this._disablePointerEventsTimeoutId);
+      clearTimeout(this._disablePointerEventsTimeoutId);
     }
 
-    this._disablePointerEventsTimeoutId = requestAnimationTimeout(
+    this._disablePointerEventsTimeoutId = setTimeout(
       this._debounceScrollEndedCallback,
       scrollingResetTimeInterval,
     );
