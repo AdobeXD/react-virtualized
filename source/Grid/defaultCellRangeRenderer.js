@@ -2,6 +2,108 @@
 
 import type {CellRangeRendererParams} from './types';
 
+function foreachKey(
+  rowStartIndex,
+  rowStopIndex,
+  columnStartIndex,
+  columnStopIndex,
+  callback,
+) {
+  for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
+    for (
+      let columnIndex = columnStartIndex;
+      columnIndex <= columnStopIndex;
+      columnIndex++
+    ) {
+      let key = getKey(rowIndex, columnIndex);
+      callback(key);
+    }
+  }
+}
+
+function checkValuesUnique(values) {
+  let newSet = new Set();
+  for (let value of values) {
+    if (newSet.has(value)) {
+      debugger;
+    } else {
+      newSet.add(value);
+    }
+  }
+}
+
+class ReusableKeyCache {
+  constructor() {
+    this.lastMap = new Map();
+  }
+
+  static symbol = Symbol('ReusableKeyCache_symbol');
+  static getReusableKeyCache(cellCache) {
+    let reusableKeyCache = cellCache[ReusableKeyCache.symbol];
+    if (reusableKeyCache == null) {
+      reusableKeyCache = cellCache[
+        ReusableKeyCache.symbol
+      ] = new ReusableKeyCache();
+    }
+    return reusableKeyCache;
+  }
+
+  getReusableKeyMap(
+    rowStartIndex,
+    rowStopIndex,
+    columnStartIndex,
+    columnStopIndex,
+  ) {
+    // so, each thing has to get it's own shit
+    let newMap = new Map();
+    let usedKeys = [];
+    let lastMap = this.lastMap;
+    let nextKey = 1;
+
+    foreachKey(
+      rowStartIndex,
+      rowStopIndex,
+      columnStartIndex,
+      columnStopIndex,
+      key => {
+        let lastKey = lastMap.get(key);
+        if (lastKey != null) {
+          newMap.set(key, lastKey);
+          usedKeys[lastKey] = true;
+        }
+      },
+    );
+
+    foreachKey(
+      rowStartIndex,
+      rowStopIndex,
+      columnStartIndex,
+      columnStopIndex,
+      key => {
+        let newKey = newMap.get(key);
+        if (newKey == null) {
+          // find new key for this
+          while (newKey == null) {
+            if (!usedKeys[nextKey]) {
+              newKey = nextKey;
+            }
+            nextKey++;
+          }
+        }
+        newMap.set(key, newKey);
+        usedKeys[newKey] = true;
+      },
+    );
+
+    this.lastMap = newMap;
+    return newMap;
+  }
+}
+
+function getKey(rowIndex, columnIndex) {
+  return `${rowIndex}-${columnIndex}`;
+}
+
 /**
  * Default implementation of cellRangeRenderer used by Grid.
  * This renderer supports cell-caching while the user is scrolling.
@@ -27,6 +129,15 @@ export default function defaultCellRangeRenderer({
   visibleRowIndices,
 }: CellRangeRendererParams) {
   const renderedCells = [];
+
+  let reusableKeyCache = ReusableKeyCache.getReusableKeyCache(cellCache);
+  let reusableKeyMap = reusableKeyCache.getReusableKeyMap(
+    rowStartIndex,
+    rowStopIndex,
+    columnStartIndex,
+    columnStopIndex,
+  );
+  //  console.log('+++++++', JSON.stringify(Array.from(reusableKeyMap.values())));
 
   // Browsers have native size limits for elements (eg Chrome 33M pixels, IE 1.5M pixes).
   // User cannot scroll beyond these size limitations.
@@ -55,7 +166,8 @@ export default function defaultCellRangeRenderer({
         columnIndex <= visibleColumnIndices.stop &&
         rowIndex >= visibleRowIndices.start &&
         rowIndex <= visibleRowIndices.stop;
-      let key = `${rowIndex}-${columnIndex}`;
+      let key = getKey(rowIndex, columnIndex);
+      let reuseKey = reusableKeyMap.get(key).toString();
       let style;
 
       // Cache style objects so shallow-compare doesn't re-render unnecessarily.
@@ -95,7 +207,7 @@ export default function defaultCellRangeRenderer({
         columnIndex,
         isScrolling,
         isVisible,
-        key,
+        key: reuseKey,
         parent,
         rowIndex,
         style,
@@ -123,6 +235,10 @@ export default function defaultCellRangeRenderer({
         }
 
         renderedCell = cellCache[key];
+        if (renderedCell.key !== reuseKey) {
+          // this prevents a previously cached cell from using a wrong and possibly duplicate key
+          renderedCell = Object.assign({}, renderedCell, {key: reuseKey});
+        }
 
         // If the user is no longer scrolling, don't cache cells.
         // This makes dynamic cell content difficult for users and would also lead to a heavier memory footprint.
@@ -141,6 +257,12 @@ export default function defaultCellRangeRenderer({
       renderedCells.push(renderedCell);
     }
   }
+
+  checkValuesUnique(renderedCells.map(cell => cell.key));
+
+  renderedCells.sort((a, b) => {
+    return parseInt(b.key) - parseInt(a.key);
+  });
 
   return renderedCells;
 }

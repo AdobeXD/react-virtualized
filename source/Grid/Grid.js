@@ -415,10 +415,9 @@ class Grid extends React.PureComponent<Props, State> {
     scrollLeft: scrollLeftParam = 0,
     scrollTop: scrollTopParam = 0,
   }: ScrollPosition) {
-    // On iOS, we can arrive at negative offsets by swiping past the start.
-    // To prevent flicker here, we make playing in the negative offset zone cause nothing to happen.
+    // To prevent flicker here, we treat negative values as if they are zero
     if (scrollTopParam < 0) {
-      return;
+      scrollTopParam = 0;
     }
 
     // Prevent pointer events from interrupting a smooth scroll
