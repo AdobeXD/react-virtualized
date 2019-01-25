@@ -21,16 +21,16 @@ function foreachKey(
   }
 }
 
-function checkValuesUnique(values) {
-  let newSet = new Set();
-  for (let value of values) {
-    if (newSet.has(value)) {
-      debugger;
-    } else {
-      newSet.add(value);
-    }
-  }
-}
+// function checkValuesUnique(values) {
+//   let newSet = new Set();
+//   for (let value of values) {
+//     if (newSet.has(value)) {
+//       debugger;
+//     } else {
+//       newSet.add(value);
+//     }
+//   }
+// }
 
 class ReusableKeyCache {
   constructor() {
@@ -258,7 +258,7 @@ export default function defaultCellRangeRenderer({
     }
   }
 
-  checkValuesUnique(renderedCells.map(cell => cell.key));
+  // checkValuesUnique(renderedCells.map(cell => cell.key));
 
   renderedCells.sort((a, b) => {
     return parseInt(b.key) - parseInt(a.key);
