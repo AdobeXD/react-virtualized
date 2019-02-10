@@ -235,7 +235,7 @@ export default function defaultCellRangeRenderer({
         }
 
         renderedCell = cellCache[key];
-        if (renderedCell.key !== reuseKey) {
+        if (renderedCell && renderedCell.key !== reuseKey) {
           // this prevents a previously cached cell from using a wrong and possibly duplicate key
           renderedCell = Object.assign({}, renderedCell, {key: reuseKey});
         }
