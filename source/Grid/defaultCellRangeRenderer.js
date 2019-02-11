@@ -54,7 +54,6 @@ class ReusableKeyCache {
     columnStartIndex,
     columnStopIndex,
   ) {
-    // so, each thing has to get it's own shit
     let newMap = new Map();
     let usedKeys = [];
     let lastMap = this.lastMap;
