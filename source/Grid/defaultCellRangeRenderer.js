@@ -259,8 +259,8 @@ export default function defaultCellRangeRenderer({
 
   // checkValuesUnique(renderedCells.map(cell => cell.key));
 
-  renderedCells.sort((a, b) => {
-    return parseInt(b.key) - parseInt(a.key);
+  renderedCells.sort(function (a, b) {
+    return a.key.localeCompare(b.key);
   });
 
   return renderedCells;
