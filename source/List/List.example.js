@@ -241,7 +241,7 @@ export default class ListExample extends React.PureComponent {
         </div>
         <div>
           <div className={styles.name}>{datum.name}</div>
-          <div className={styles.index}>This is row {index}, key: {key}</div>
+          <div className={styles.index}>This is row {index}</div>
           {additionalContent}
         </div>
         {useDynamicRowHeight && (
