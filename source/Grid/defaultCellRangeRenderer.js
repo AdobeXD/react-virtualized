@@ -38,10 +38,10 @@ class ReusableKeyCache {
   }
 
   static symbol = Symbol('ReusableKeyCache_symbol');
-  static getReusableKeyCache(cellCache) {
-    let reusableKeyCache = cellCache[ReusableKeyCache.symbol];
+  static getReusableKeyCache(cacheOnThisObject) {
+    let reusableKeyCache = cacheOnThisObject[ReusableKeyCache.symbol];
     if (reusableKeyCache == null) {
-      reusableKeyCache = cellCache[
+      reusableKeyCache = cacheOnThisObject[
         ReusableKeyCache.symbol
       ] = new ReusableKeyCache();
     }
@@ -129,7 +129,7 @@ export default function defaultCellRangeRenderer({
 }: CellRangeRendererParams) {
   const renderedCells = [];
 
-  let reusableKeyCache = ReusableKeyCache.getReusableKeyCache(cellCache);
+  let reusableKeyCache = ReusableKeyCache.getReusableKeyCache(parent);
   let reusableKeyMap = reusableKeyCache.getReusableKeyMap(
     rowStartIndex,
     rowStopIndex,
