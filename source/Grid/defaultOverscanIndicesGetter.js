@@ -21,7 +21,6 @@ export default function defaultOverscanIndicesGetter({
   stopIndex,
 }: OverscanIndicesGetterParams): OverscanIndices {
   // TODO: Move to application. Making buffer cells in both directions
-  debugger;
   return {
     overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
     overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount),
