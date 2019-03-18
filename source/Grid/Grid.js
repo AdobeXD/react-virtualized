@@ -226,6 +226,8 @@ type Props = {
 type InstanceProps = {
   prevColumnWidth: CellSize,
   prevRowHeight: CellSize,
+  prevWidth: number,
+  prevHeight: number,
 
   prevColumnCount: number,
   prevRowCount: number,
@@ -307,8 +309,10 @@ class Grid extends React.PureComponent<Props, State> {
   _rowStopIndex: number;
   _renderedColumnStartIndex = 0;
   _renderedColumnStopIndex = 0;
+  _maxRenderedColumnCount = 0;
   _renderedRowStartIndex = 0;
   _renderedRowStopIndex = 0;
+  _maxRenderedRowCount = 0;
 
   _initialScrollTop: number;
   _initialScrollLeft: number;
@@ -338,6 +342,8 @@ class Grid extends React.PureComponent<Props, State> {
 
         prevColumnWidth: props.columnWidth,
         prevRowHeight: props.rowHeight,
+        prevWidth: props.width,
+        prevHeight: props.height,
         prevColumnCount: props.columnCount,
         prevRowCount: props.rowCount,
         prevIsScrolling: props.isScrolling === true,
@@ -936,6 +942,18 @@ class Grid extends React.PureComponent<Props, State> {
       },
     });
 
+    // Reset max visible rows count when height changes
+    if (instanceProps.prevHeight !== nextProps.height) {
+      this._maxRenderedRowCount = 0;
+      instanceProps.prevHeight = nextProps.height;
+    }
+
+    // Reset max visible columns count when width changes
+    if (instanceProps.prevWidth !== nextProps.width) {
+      this._maxRenderedColumnCount = 0;
+      instanceProps.prevWidth = nextProps.width;
+    }
+
     instanceProps.prevColumnCount = nextProps.columnCount;
     instanceProps.prevColumnWidth = nextProps.columnWidth;
     instanceProps.prevIsScrolling = nextProps.isScrolling === true;
@@ -1111,18 +1129,48 @@ class Grid extends React.PureComponent<Props, State> {
 
     // Render only enough columns and rows to cover the visible area of the grid.
     if (height > 0 && width > 0) {
-      const visibleColumnIndices = instanceProps.columnSizeAndPositionManager.getVisibleCellRange(
+      let visibleColumnIndices = instanceProps.columnSizeAndPositionManager.getVisibleCellRange(
         {
           containerSize: width,
           offset: scrollLeft,
         },
       );
-      const visibleRowIndices = instanceProps.rowSizeAndPositionManager.getVisibleCellRange(
+      let visibleRowIndices = instanceProps.rowSizeAndPositionManager.getVisibleCellRange(
         {
           containerSize: height,
           offset: scrollTop,
         },
       );
+
+      // Compute max columns within visible area
+      if (this._maxRenderedColumnCount == 0) {
+        this._maxRenderedColumnCount =
+          visibleColumnIndices.stop - visibleColumnIndices.start;
+        this._maxRenderedColumnCount++;
+      }
+
+      if (
+        this._maxRenderedColumnCount !=
+        visibleColumnIndices.stop - visibleColumnIndices.start
+      ) {
+        if (visibleColumnIndices.start > 0) visibleColumnIndices.start--;
+        else visibleColumnIndices.stop++;
+      }
+
+      // Compute max rows within visible area
+      if (this._maxRenderedRowCount == 0) {
+        this._maxRenderedRowCount =
+          visibleRowIndices.stop - visibleRowIndices.start;
+        this._maxRenderedRowCount++;
+      }
+
+      if (
+        this._maxRenderedRowCount !=
+        visibleRowIndices.stop - visibleRowIndices.start
+      ) {
+        if (visibleRowIndices.start > 0) visibleRowIndices.start--;
+        else visibleRowIndices.stop++;
+      }
 
       const horizontalOffsetAdjustment = instanceProps.columnSizeAndPositionManager.getOffsetAdjustment(
         {
