@@ -284,7 +284,7 @@ class Grid extends React.PureComponent<Props, State> {
     scrollToRow: -1,
     style: {},
     tabIndex: 0,
-    isScrollingOptOut: false,
+    isScrollingOptOut: true, // TODO: Move to application. Do not re-render on scoll stop.
   };
 
   // Invokes onSectionRendered callback only when start/stop row or column indices change
