@@ -1142,11 +1142,10 @@ class Grid extends React.PureComponent<Props, State> {
         },
       );
 
-      // Compute max columns within visible area
+      // Max columns within visible area is always plus 1 (Overlapping)
       if (this._maxRenderedColumnCount == 0) {
         this._maxRenderedColumnCount =
-          visibleColumnIndices.stop - visibleColumnIndices.start;
-        this._maxRenderedColumnCount++;
+          visibleColumnIndices.stop - visibleColumnIndices.start + 1;
       }
 
       if (
@@ -1157,11 +1156,10 @@ class Grid extends React.PureComponent<Props, State> {
         else visibleColumnIndices.stop++;
       }
 
-      // Compute max rows within visible area
+      // Max rows within visible area is always plus 1 (Overlapping)
       if (this._maxRenderedRowCount == 0) {
         this._maxRenderedRowCount =
-          visibleRowIndices.stop - visibleRowIndices.start;
-        this._maxRenderedRowCount++;
+          visibleRowIndices.stop - visibleRowIndices.start + 1;
       }
 
       if (
