@@ -1162,9 +1162,6 @@ class Grid extends React.PureComponent<Props, State> {
       if (this._maxRenderedRowCount == 0) {
         this._maxRenderedRowCount =
           visibleRowIndices.stop - visibleRowIndices.start + 1;
-        console.log(
-          'compute max renderable rows: ' + this._maxRenderedRowCount,
-        );
       }
 
       if (
@@ -1174,10 +1171,6 @@ class Grid extends React.PureComponent<Props, State> {
         if (visibleRowIndices.start > 0) visibleRowIndices.start--;
         else visibleRowIndices.stop++;
       }
-
-      console.log(
-        'Adjusted Rows: ' + (visibleRowIndices.stop - visibleRowIndices.start),
-      );
 
       const horizontalOffsetAdjustment = instanceProps.columnSizeAndPositionManager.getOffsetAdjustment(
         {
@@ -1233,8 +1226,6 @@ class Grid extends React.PureComponent<Props, State> {
       let columnStopIndex = overscanColumnIndices.overscanStopIndex;
       let rowStartIndex = overscanRowIndices.overscanStartIndex;
       let rowStopIndex = overscanRowIndices.overscanStopIndex;
-
-      console.log('Rows: ' + (rowStopIndex - rowStartIndex));
 
       // Advanced use-cases (eg CellMeasurer) require batched measurements to determine accurate sizes.
       if (deferredMeasurementCache) {
