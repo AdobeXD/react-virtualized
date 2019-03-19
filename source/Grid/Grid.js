@@ -284,7 +284,7 @@ class Grid extends React.PureComponent<Props, State> {
     scrollToRow: -1,
     style: {},
     tabIndex: 0,
-    isScrollingOptOut: true, // TODO: Move to application. Do not re-render on scroll stop.
+    isScrollingOptOut: false,
   };
 
   // Invokes onSectionRendered callback only when start/stop row or column indices change
@@ -1170,6 +1170,10 @@ class Grid extends React.PureComponent<Props, State> {
         else visibleRowIndices.stop++;
       }
 
+      console.log(
+        'Adjusted Rows: ' + (visibleRowIndices.stop - visibleRowIndices.start),
+      );
+
       const horizontalOffsetAdjustment = instanceProps.columnSizeAndPositionManager.getOffsetAdjustment(
         {
           containerSize: width,
@@ -1224,6 +1228,8 @@ class Grid extends React.PureComponent<Props, State> {
       let columnStopIndex = overscanColumnIndices.overscanStopIndex;
       let rowStartIndex = overscanRowIndices.overscanStartIndex;
       let rowStopIndex = overscanRowIndices.overscanStopIndex;
+
+      console.log('Rows: ' + (rowStopIndex - rowStartIndex));
 
       // Advanced use-cases (eg CellMeasurer) require batched measurements to determine accurate sizes.
       if (deferredMeasurementCache) {
