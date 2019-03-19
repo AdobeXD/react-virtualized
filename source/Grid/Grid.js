@@ -39,7 +39,7 @@ import {
  * Specifies the number of milliseconds during which to disable pointer events while a scroll is in progress.
  * This improves performance and makes scrolling smoother.
  */
-export const DEFAULT_SCROLLING_RESET_TIME_INTERVAL = 600;
+export const DEFAULT_SCROLLING_RESET_TIME_INTERVAL = 150;
 
 /**
  * Controls whether the Grid updates the DOM element's scrollLeft/scrollTop based on the current state or just observes it.
@@ -1005,8 +1005,10 @@ class Grid extends React.PureComponent<Props, State> {
       this._resetStyleCache();
     }
 
+    console.log('render');
     // Reset max visible rows count when height changes
     if (this.state.instanceProps.prevHeight !== this.props.height) {
+      console.log('Height changed');
       this._maxRenderedRowCount = 0;
       this.state.instanceProps.prevHeight = this.props.height;
     }
@@ -1160,6 +1162,9 @@ class Grid extends React.PureComponent<Props, State> {
       if (this._maxRenderedRowCount == 0) {
         this._maxRenderedRowCount =
           visibleRowIndices.stop - visibleRowIndices.start + 1;
+        console.log(
+          'compute max renderable rows: ' + this._maxRenderedRowCount,
+        );
       }
 
       if (
