@@ -39,7 +39,7 @@ import {
  * Specifies the number of milliseconds during which to disable pointer events while a scroll is in progress.
  * This improves performance and makes scrolling smoother.
  */
-export const DEFAULT_SCROLLING_RESET_TIME_INTERVAL = 150;
+export const DEFAULT_SCROLLING_RESET_TIME_INTERVAL = 600;
 
 /**
  * Controls whether the Grid updates the DOM element's scrollLeft/scrollTop based on the current state or just observes it.
@@ -942,18 +942,6 @@ class Grid extends React.PureComponent<Props, State> {
       },
     });
 
-    // Reset max visible rows count when height changes
-    if (instanceProps.prevHeight !== nextProps.height) {
-      this._maxRenderedRowCount = 0;
-      instanceProps.prevHeight = nextProps.height;
-    }
-
-    // Reset max visible columns count when width changes
-    if (instanceProps.prevWidth !== nextProps.width) {
-      this._maxRenderedColumnCount = 0;
-      instanceProps.prevWidth = nextProps.width;
-    }
-
     instanceProps.prevColumnCount = nextProps.columnCount;
     instanceProps.prevColumnWidth = nextProps.columnWidth;
     instanceProps.prevIsScrolling = nextProps.isScrolling === true;
@@ -1015,6 +1003,18 @@ class Grid extends React.PureComponent<Props, State> {
     // if state.isScrolling (not from _isScrolling) then reset
     if (!this.state.isScrolling) {
       this._resetStyleCache();
+    }
+
+    // Reset max visible rows count when height changes
+    if (this.state.instanceProps.prevHeight !== this.props.height) {
+      this._maxRenderedRowCount = 0;
+      this.state.instanceProps.prevHeight = this.props.height;
+    }
+
+    // Reset max visible columns count when width changes
+    if (this.state.instanceProps.prevWidth !== this.props.width) {
+      this._maxRenderedColumnCount = 0;
+      this.state.instanceProps.prevWidth = this.props.width;
     }
 
     // calculate children to render here
