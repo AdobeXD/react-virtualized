@@ -1005,10 +1005,8 @@ class Grid extends React.PureComponent<Props, State> {
       this._resetStyleCache();
     }
 
-    console.log('render');
     // Reset max visible rows count when height changes
     if (this.state.instanceProps.prevHeight !== this.props.height) {
-      console.log('Height changed');
       this._maxRenderedRowCount = 0;
       this.state.instanceProps.prevHeight = this.props.height;
     }
@@ -1144,33 +1142,8 @@ class Grid extends React.PureComponent<Props, State> {
         },
       );
 
-      // Max columns within visible area is always plus 1 (Overlapping)
-      if (this._maxRenderedColumnCount == 0) {
-        this._maxRenderedColumnCount =
-          visibleColumnIndices.stop - visibleColumnIndices.start + 1;
-      }
-
-      if (
-        this._maxRenderedColumnCount !=
-        visibleColumnIndices.stop - visibleColumnIndices.start
-      ) {
-        if (visibleColumnIndices.start > 0) visibleColumnIndices.start--;
-        else visibleColumnIndices.stop++;
-      }
-
-      // Max rows within visible area is always plus 1 (Overlapping)
-      if (this._maxRenderedRowCount == 0) {
-        this._maxRenderedRowCount =
-          visibleRowIndices.stop - visibleRowIndices.start + 1;
-      }
-
-      if (
-        this._maxRenderedRowCount !=
-        visibleRowIndices.stop - visibleRowIndices.start
-      ) {
-        if (visibleRowIndices.start > 0) visibleRowIndices.start--;
-        else visibleRowIndices.stop++;
-      }
+      // Adjust rows/columns count for max values within visible area
+      this.adjustForOverlapping(visibleColumnIndices, visibleRowIndices);
 
       const horizontalOffsetAdjustment = instanceProps.columnSizeAndPositionManager.getOffsetAdjustment(
         {
@@ -1294,6 +1267,33 @@ class Grid extends React.PureComponent<Props, State> {
       this._columnStopIndex = columnStopIndex;
       this._rowStartIndex = rowStartIndex;
       this._rowStopIndex = rowStopIndex;
+    }
+  }
+
+  adjustForOverlapping(visibleColumnIndices, visibleRowIndices) {
+    // Max columns within visible area is always plus 1 (Overlapping)
+    if (this._maxRenderedColumnCount == 0) {
+      this._maxRenderedColumnCount =
+        visibleColumnIndices.stop - visibleColumnIndices.start + 1;
+    }
+    if (
+      this._maxRenderedColumnCount !=
+      visibleColumnIndices.stop - visibleColumnIndices.start
+    ) {
+      if (visibleColumnIndices.start > 0) visibleColumnIndices.start--;
+      else visibleColumnIndices.stop++;
+    }
+    // Max rows within visible area is always plus 1 (Overlapping)
+    if (this._maxRenderedRowCount == 0) {
+      this._maxRenderedRowCount =
+        visibleRowIndices.stop - visibleRowIndices.start + 1;
+    }
+    if (
+      this._maxRenderedRowCount !=
+      visibleRowIndices.stop - visibleRowIndices.start
+    ) {
+      if (visibleRowIndices.start > 0) visibleRowIndices.start--;
+      else visibleRowIndices.stop++;
     }
   }
 
