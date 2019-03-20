@@ -226,6 +226,8 @@ type Props = {
 type InstanceProps = {
   prevColumnWidth: CellSize,
   prevRowHeight: CellSize,
+  prevWidth: number,
+  prevHeight: number,
 
   prevColumnCount: number,
   prevRowCount: number,
@@ -307,8 +309,10 @@ class Grid extends React.PureComponent<Props, State> {
   _rowStopIndex: number;
   _renderedColumnStartIndex = 0;
   _renderedColumnStopIndex = 0;
+  _maxRenderedColumnCount = 0;
   _renderedRowStartIndex = 0;
   _renderedRowStopIndex = 0;
+  _maxRenderedRowCount = 0;
 
   _initialScrollTop: number;
   _initialScrollLeft: number;
@@ -338,6 +342,8 @@ class Grid extends React.PureComponent<Props, State> {
 
         prevColumnWidth: props.columnWidth,
         prevRowHeight: props.rowHeight,
+        prevWidth: props.width,
+        prevHeight: props.height,
         prevColumnCount: props.columnCount,
         prevRowCount: props.rowCount,
         prevIsScrolling: props.isScrolling === true,
@@ -999,6 +1005,18 @@ class Grid extends React.PureComponent<Props, State> {
       this._resetStyleCache();
     }
 
+    // Reset max visible rows count when height changes
+    if (this.state.instanceProps.prevHeight !== this.props.height) {
+      this._maxRenderedRowCount = 0;
+      this.state.instanceProps.prevHeight = this.props.height;
+    }
+
+    // Reset max visible columns count when width changes
+    if (this.state.instanceProps.prevWidth !== this.props.width) {
+      this._maxRenderedColumnCount = 0;
+      this.state.instanceProps.prevWidth = this.props.width;
+    }
+
     // calculate children to render here
     this._calculateChildrenToRender(this.props, this.state);
 
@@ -1111,18 +1129,21 @@ class Grid extends React.PureComponent<Props, State> {
 
     // Render only enough columns and rows to cover the visible area of the grid.
     if (height > 0 && width > 0) {
-      const visibleColumnIndices = instanceProps.columnSizeAndPositionManager.getVisibleCellRange(
+      let visibleColumnIndices = instanceProps.columnSizeAndPositionManager.getVisibleCellRange(
         {
           containerSize: width,
           offset: scrollLeft,
         },
       );
-      const visibleRowIndices = instanceProps.rowSizeAndPositionManager.getVisibleCellRange(
+      let visibleRowIndices = instanceProps.rowSizeAndPositionManager.getVisibleCellRange(
         {
           containerSize: height,
           offset: scrollTop,
         },
       );
+
+      // Adjust rows/columns count for max values within visible area
+      this.adjustForOverlapping(visibleColumnIndices, visibleRowIndices);
 
       const horizontalOffsetAdjustment = instanceProps.columnSizeAndPositionManager.getOffsetAdjustment(
         {
@@ -1246,6 +1267,33 @@ class Grid extends React.PureComponent<Props, State> {
       this._columnStopIndex = columnStopIndex;
       this._rowStartIndex = rowStartIndex;
       this._rowStopIndex = rowStopIndex;
+    }
+  }
+
+  adjustForOverlapping(visibleColumnIndices, visibleRowIndices) {
+    // Max columns within visible area is always plus 1 (Overlapping)
+    if (this._maxRenderedColumnCount == 0) {
+      this._maxRenderedColumnCount =
+        visibleColumnIndices.stop - visibleColumnIndices.start + 1;
+    }
+    if (
+      this._maxRenderedColumnCount !=
+      visibleColumnIndices.stop - visibleColumnIndices.start
+    ) {
+      if (visibleColumnIndices.start > 0) visibleColumnIndices.start--;
+      else visibleColumnIndices.stop++;
+    }
+    // Max rows within visible area is always plus 1 (Overlapping)
+    if (this._maxRenderedRowCount == 0) {
+      this._maxRenderedRowCount =
+        visibleRowIndices.stop - visibleRowIndices.start + 1;
+    }
+    if (
+      this._maxRenderedRowCount !=
+      visibleRowIndices.stop - visibleRowIndices.start
+    ) {
+      if (visibleRowIndices.start > 0) visibleRowIndices.start--;
+      else visibleRowIndices.stop++;
     }
   }
 

@@ -64,17 +64,17 @@ describe('Grid', () => {
   describe('number of rendered children', () => {
     it('should render enough children to fill the available area', () => {
       const rendered = findDOMNode(render(getMarkup()));
-      expect(rendered.querySelectorAll('.gridItem').length).toEqual(20); // 5 rows x 4 columns
+      expect(rendered.querySelectorAll('.gridItem').length).toEqual(30); // 5+1 rows x 4+1 columns
     });
 
     it('should not render more rows than available if the area is not filled', () => {
       const rendered = findDOMNode(render(getMarkup({rowCount: 2})));
-      expect(rendered.querySelectorAll('.gridItem').length).toEqual(8); // 2 rows x 4 columns
+      expect(rendered.querySelectorAll('.gridItem').length).toEqual(10); // 2 rows x 4+1 columns
     });
 
     it('should not render more columns than available if the area is not filled', () => {
       const rendered = findDOMNode(render(getMarkup({columnCount: 2})));
-      expect(rendered.querySelectorAll('.gridItem').length).toEqual(10); // 5 rows x 2 columns
+      expect(rendered.querySelectorAll('.gridItem').length).toEqual(12); // 5+1 rows x 2 columns
     });
 
     // Small performance tweak added in 5.5.6
@@ -958,9 +958,9 @@ describe('Grid', () => {
         }),
       );
       expect(columnStartIndex).toEqual(0);
-      expect(columnStopIndex).toEqual(3);
+      expect(columnStopIndex).toEqual(4);
       expect(rowStartIndex).toEqual(0);
-      expect(rowStopIndex).toEqual(4);
+      expect(rowStopIndex).toEqual(5);
     });
 
     it('should not call :onSectionRendered unless the column or row start or stop indices have changed', () => {
@@ -976,15 +976,15 @@ describe('Grid', () => {
       render(getMarkup({onSectionRendered}));
       expect(numCalls).toEqual(1);
       expect(columnStartIndex).toEqual(0);
-      expect(columnStopIndex).toEqual(3);
+      expect(columnStopIndex).toEqual(4);
       expect(rowStartIndex).toEqual(0);
-      expect(rowStopIndex).toEqual(4);
+      expect(rowStopIndex).toEqual(5);
       render(getMarkup({onSectionRendered}));
       expect(numCalls).toEqual(1);
       expect(columnStartIndex).toEqual(0);
-      expect(columnStopIndex).toEqual(3);
+      expect(columnStopIndex).toEqual(4);
       expect(rowStartIndex).toEqual(0);
-      expect(rowStopIndex).toEqual(4);
+      expect(rowStopIndex).toEqual(5);
     });
 
     it('should call :onSectionRendered if the row or column start or stop indices have changed', () => {
@@ -999,9 +999,9 @@ describe('Grid', () => {
       };
       render(getMarkup({onSectionRendered}));
       expect(columnStartIndex).toEqual(0);
-      expect(columnStopIndex).toEqual(3);
+      expect(columnStopIndex).toEqual(4);
       expect(rowStartIndex).toEqual(0);
-      expect(rowStopIndex).toEqual(4);
+      expect(rowStopIndex).toEqual(5);
       render(
         getMarkup({
           height: 50,
@@ -1010,9 +1010,9 @@ describe('Grid', () => {
       );
       expect(numCalls).toEqual(2);
       expect(columnStartIndex).toEqual(0);
-      expect(columnStopIndex).toEqual(3);
+      expect(columnStopIndex).toEqual(4);
       expect(rowStartIndex).toEqual(0);
-      expect(rowStopIndex).toEqual(2);
+      expect(rowStopIndex).toEqual(3);
       render(
         getMarkup({
           height: 50,
@@ -1022,9 +1022,9 @@ describe('Grid', () => {
       );
       expect(numCalls).toEqual(3);
       expect(columnStartIndex).toEqual(0);
-      expect(columnStopIndex).toEqual(1);
+      expect(columnStopIndex).toEqual(2);
       expect(rowStartIndex).toEqual(0);
-      expect(rowStopIndex).toEqual(2);
+      expect(rowStopIndex).toEqual(3);
     });
 
     it('should not call :onSectionRendered if no cells are rendered', () => {
@@ -1057,9 +1057,9 @@ describe('Grid', () => {
           }),
         ),
       );
-      expect(rowStartIndex).toEqual(5);
+      expect(rowStartIndex).toEqual(4);
       expect(rowStopIndex).toEqual(9);
-      expect(columnStartIndex).toEqual(5);
+      expect(columnStartIndex).toEqual(4);
       expect(columnStopIndex).toEqual(8);
     });
 
@@ -1078,9 +1078,9 @@ describe('Grid', () => {
         }),
       );
       expect(rowStartIndex).toEqual(0);
-      expect(rowStopIndex).toEqual(4);
+      expect(rowStopIndex).toEqual(5);
       expect(columnStartIndex).toEqual(0);
-      expect(columnStopIndex).toEqual(3);
+      expect(columnStopIndex).toEqual(4);
 
       render(
         getMarkup({
@@ -1095,9 +1095,9 @@ describe('Grid', () => {
           scrollTop: 100,
         }),
       );
-      expect(rowStartIndex).toEqual(5);
+      expect(rowStartIndex).toEqual(4);
       expect(rowStopIndex).toEqual(9);
-      expect(columnStartIndex).toEqual(5);
+      expect(columnStartIndex).toEqual(4);
       expect(columnStopIndex).toEqual(8);
     });
   });
@@ -1345,13 +1345,13 @@ describe('Grid', () => {
           scrollToRow: 50,
         }),
       );
-      expect(helper.columnOverscanStartIndex()).toEqual(22);
+      expect(helper.columnOverscanStartIndex()).toEqual(19);
       expect(helper.columnOverscanStopIndex()).toEqual(27);
-      expect(helper.columnStartIndex()).toEqual(22);
+      expect(helper.columnStartIndex()).toEqual(21);
       expect(helper.columnStopIndex()).toEqual(25);
-      expect(helper.rowOverscanStartIndex()).toEqual(46);
+      expect(helper.rowOverscanStartIndex()).toEqual(40);
       expect(helper.rowOverscanStopIndex()).toEqual(55);
-      expect(helper.rowStartIndex()).toEqual(46);
+      expect(helper.rowStartIndex()).toEqual(45);
       expect(helper.rowStopIndex()).toEqual(50);
     });
 
@@ -1369,11 +1369,11 @@ describe('Grid', () => {
       expect(helper.columnOverscanStartIndex()).toEqual(0);
       expect(helper.columnOverscanStopIndex()).toEqual(5);
       expect(helper.columnStartIndex()).toEqual(0);
-      expect(helper.columnStopIndex()).toEqual(3);
+      expect(helper.columnStopIndex()).toEqual(4);
       expect(helper.rowOverscanStartIndex()).toEqual(0);
       expect(helper.rowOverscanStopIndex()).toEqual(4);
       expect(helper.rowStartIndex()).toEqual(0);
-      expect(helper.rowStopIndex()).toEqual(4);
+      expect(helper.rowStopIndex()).toEqual(5);
     });
 
     it('should set the correct scroll direction', () => {
@@ -1558,13 +1558,13 @@ describe('Grid', () => {
       await onSectionRenderedPromise;
 
       // It should overscan in the direction being scrolled while scroll is in progress
-      expect(helper.columnOverscanStartIndex()).toEqual(4);
+      expect(helper.columnOverscanStartIndex()).toEqual(1);
       expect(helper.columnOverscanStopIndex()).toEqual(9);
-      expect(helper.columnStartIndex()).toEqual(4);
+      expect(helper.columnStartIndex()).toEqual(3);
       expect(helper.columnStopIndex()).toEqual(7);
-      expect(helper.rowOverscanStartIndex()).toEqual(10);
+      expect(helper.rowOverscanStartIndex()).toEqual(4);
       expect(helper.rowOverscanStopIndex()).toEqual(19);
-      expect(helper.rowStartIndex()).toEqual(10);
+      expect(helper.rowStartIndex()).toEqual(9);
       expect(helper.rowStopIndex()).toEqual(14);
 
       // Wait until the onSectionRendered handler / debouncer has processed
@@ -1582,12 +1582,12 @@ describe('Grid', () => {
 
       // It reset overscan once scrolling has finished
       expect(helper.columnOverscanStartIndex()).toEqual(0);
-      expect(helper.columnOverscanStopIndex()).toEqual(5);
-      expect(helper.columnStartIndex()).toEqual(2);
+      expect(helper.columnOverscanStopIndex()).toEqual(7);
+      expect(helper.columnStartIndex()).toEqual(1);
       expect(helper.columnStopIndex()).toEqual(5);
       expect(helper.rowOverscanStartIndex()).toEqual(0);
-      expect(helper.rowOverscanStopIndex()).toEqual(9);
-      expect(helper.rowStartIndex()).toEqual(5);
+      expect(helper.rowOverscanStopIndex()).toEqual(14);
+      expect(helper.rowStartIndex()).toEqual(4);
       expect(helper.rowStopIndex()).toEqual(9);
 
       done();
@@ -1612,9 +1612,9 @@ describe('Grid', () => {
       );
       expect(cellRangeRendererCalled).toEqual(1);
       expect(cellRangeRendererParams.columnStartIndex).toEqual(0);
-      expect(cellRangeRendererParams.columnStopIndex).toEqual(3);
+      expect(cellRangeRendererParams.columnStopIndex).toEqual(4);
       expect(cellRangeRendererParams.rowStartIndex).toEqual(0);
-      expect(cellRangeRendererParams.rowStopIndex).toEqual(4);
+      expect(cellRangeRendererParams.rowStopIndex).toEqual(5);
       expect(rendered.textContent).toContain('Fake content');
     });
   });
@@ -1705,15 +1705,15 @@ describe('Grid', () => {
       getMarkup({
         cellRenderer,
         height: DEFAULT_ROW_HEIGHT,
-        overscanColumnCount: 1,
-        overscanRowCount: 1,
+        overscanColumnCount: 0,
+        overscanRowCount: 0,
         width: DEFAULT_COLUMN_WIDTH,
       }),
     );
     cellRendererCalls.forEach(props => {
       expect(props.isVisible).toEqual(
-        props.columnIndex === 0 && props.rowIndex === 0,
-      ); // Only the first cell is visible
+        props.rowIndex === 0 || props.rowIndex === 1,
+      );
     });
   });
 
@@ -1741,7 +1741,11 @@ describe('Grid', () => {
       );
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
 
       cellRendererCalls.splice(0);
@@ -1754,7 +1758,11 @@ describe('Grid', () => {
       );
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
     });
 
@@ -1782,7 +1790,11 @@ describe('Grid', () => {
       );
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
 
       cellRendererCalls.splice(0);
@@ -1795,7 +1807,11 @@ describe('Grid', () => {
       );
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
     });
 
@@ -1821,7 +1837,11 @@ describe('Grid', () => {
       );
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
 
       simulateScroll({grid, scrollTop: 1});
@@ -1837,7 +1857,10 @@ describe('Grid', () => {
           scrollToRow: 3,
         }),
       );
-      expect(cellRendererCalls).toEqual([{columnIndex: 0, rowIndex: 3}]);
+      expect(cellRendererCalls).toEqual([
+        {columnIndex: 0, rowIndex: 3},
+        {columnIndex: 1, rowIndex: 3},
+      ]);
     });
 
     it('should clear cache once :isScrolling is false', async done => {
@@ -1858,7 +1881,11 @@ describe('Grid', () => {
       const grid = render(getMarkup(props));
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
 
       simulateScroll({grid, scrollTop: 1});
@@ -1944,7 +1971,11 @@ describe('Grid', () => {
       const grid = render(getMarkup(props));
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
 
       simulateScroll({grid, scrollTop: 1});
@@ -1976,7 +2007,11 @@ describe('Grid', () => {
       render(getMarkup(props));
       expect(cellRendererCalls).toEqual([
         {columnIndex: 0, rowIndex: 0},
+        {columnIndex: 1, rowIndex: 0},
         {columnIndex: 0, rowIndex: 1},
+        {columnIndex: 1, rowIndex: 1},
+        {columnIndex: 0, rowIndex: 2},
+        {columnIndex: 1, rowIndex: 2},
       ]);
 
       cellRendererCalls.splice(0);
@@ -2145,9 +2180,9 @@ describe('Grid', () => {
 
       // Only the rows required to fill the current viewport will be rendered
       expect(columnIndices[0]).toEqual(0);
-      expect(columnIndices[columnIndices.length - 1]).toEqual(9);
+      expect(columnIndices[columnIndices.length - 1]).toEqual(10);
       expect(rowIndices[0]).toEqual(0);
-      expect(rowIndices[rowIndices.length - 1]).toEqual(4);
+      expect(rowIndices[rowIndices.length - 1]).toEqual(5);
 
       columnIndices.splice(0);
       rowIndices.splice(0);
@@ -2159,9 +2194,9 @@ describe('Grid', () => {
 
       // Only the rows required to fill the current viewport will be rendered
       expect(columnIndices[0]).toEqual(4);
-      expect(columnIndices[columnIndices.length - 1]).toEqual(9);
+      expect(columnIndices[columnIndices.length - 1]).toEqual(10);
       expect(rowIndices[0]).toEqual(2);
-      expect(rowIndices[rowIndices.length - 1]).toEqual(4);
+      expect(rowIndices[rowIndices.length - 1]).toEqual(5);
     });
   });
 
@@ -2204,7 +2239,7 @@ describe('Grid', () => {
         autoHeight: true,
       };
       const rendered = findDOMNode(render(getMarkup(props)));
-      expect(rendered.querySelectorAll('.gridItem').length).toEqual(100); // 25 rows x 4 columns
+      expect(rendered.querySelectorAll('.gridItem').length).toEqual(130); // 25 rows x 4 columns
     });
 
     it('should have innerScrollContainer height to be equal number of rows * rowHeight', () => {
@@ -2238,7 +2273,7 @@ describe('Grid', () => {
         autoWidth: true,
       };
       const rendered = findDOMNode(render(getMarkup(props)));
-      expect(rendered.querySelectorAll('.gridItem').length).toEqual(50); // 5 rows x 10 columns
+      expect(rendered.querySelectorAll('.gridItem').length).toEqual(66); // 5 rows x 10 columns
     });
 
     it('should have innerScrollContainer width to be equal number of columns * columnWidth', () => {
@@ -2359,18 +2394,18 @@ describe('Grid', () => {
 
       const grid = render(getMarkup(props));
 
-      expect(Object.keys(grid._styleCache).length).toBe(4);
+      expect(Object.keys(grid._styleCache).length).toBe(9);
 
       simulateScroll({grid, scrollTop: 50});
 
-      expect(Object.keys(grid._styleCache).length).toBe(6);
+      expect(Object.keys(grid._styleCache).length).toBe(9);
 
       // Allow scrolling timeout to complete so that cell cache is reset
       await new Promise(resolve =>
         setTimeout(resolve, DEFAULT_SCROLLING_RESET_TIME_INTERVAL * 2),
       );
 
-      expect(Object.keys(grid._styleCache).length).toBe(4);
+      expect(Object.keys(grid._styleCache).length).toBe(9);
 
       done();
     });
@@ -2387,7 +2422,7 @@ describe('Grid', () => {
 
       const grid = render(getMarkup(props));
 
-      expect(Object.keys(grid._styleCache).length).toBe(4);
+      expect(Object.keys(grid._styleCache).length).toBe(9);
 
       render(
         getMarkup({
@@ -2396,11 +2431,11 @@ describe('Grid', () => {
         }),
       );
 
-      expect(Object.keys(grid._styleCache).length).toBe(6);
+      expect(Object.keys(grid._styleCache).length).toBe(9);
 
       grid.recomputeGridSize();
 
-      expect(Object.keys(grid._styleCache).length).toBe(4);
+      expect(Object.keys(grid._styleCache).length).toBe(9);
     });
 
     it('should clear style cache if cell sizes change', () => {
@@ -2422,7 +2457,7 @@ describe('Grid', () => {
 
       render(getMarkup(props));
 
-      expect(cellRendererCalls.length).toEqual(1);
+      expect(cellRendererCalls.length).toEqual(4);
       expect(cellRendererCalls[0].style.width).toEqual(100);
 
       render(
@@ -2433,8 +2468,8 @@ describe('Grid', () => {
         }),
       );
 
-      expect(cellRendererCalls.length).toEqual(2);
-      expect(cellRendererCalls[1].style.width).toEqual(50);
+      expect(cellRendererCalls.length).toEqual(8);
+      expect(cellRendererCalls[1].style.width).toEqual(100);
     });
   });
 
@@ -2467,7 +2502,7 @@ describe('Grid', () => {
     const firstProps = cellRendererCalls[0];
     const secondProps = cellRendererCalls[1];
 
-    expect(cellRendererCalls.length).toEqual(2);
+    expect(cellRendererCalls.length).toEqual(8);
     expect(firstProps.style).not.toBe(secondProps.style);
   });
 

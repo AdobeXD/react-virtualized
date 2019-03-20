@@ -20,18 +20,9 @@ export default function defaultOverscanIndicesGetter({
   startIndex,
   stopIndex,
 }: OverscanIndicesGetterParams): OverscanIndices {
-  if (scrollDirection === SCROLL_DIRECTION_FORWARD) {
-    return {
-      overscanStartIndex: Math.max(0, startIndex),
-      overscanStopIndex: Math.min(
-        cellCount - 1,
-        stopIndex + overscanCellsCount,
-      ),
-    };
-  } else {
-    return {
-      overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
-      overscanStopIndex: Math.min(cellCount - 1, stopIndex),
-    };
-  }
+  // TODO: Move to application. Making buffer cells in both directions
+  return {
+    overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
+    overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount),
+  };
 }
