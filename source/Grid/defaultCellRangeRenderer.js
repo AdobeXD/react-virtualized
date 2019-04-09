@@ -21,17 +21,6 @@ function foreachKey(
   }
 }
 
-// function checkValuesUnique(values) {
-//   let newSet = new Set();
-//   for (let value of values) {
-//     if (newSet.has(value)) {
-//       debugger;
-//     } else {
-//       newSet.add(value);
-//     }
-//   }
-// }
-
 class ReusableKeyCache {
   constructor() {
     this.lastMap = new Map();
@@ -136,7 +125,6 @@ export default function defaultCellRangeRenderer({
     columnStartIndex,
     columnStopIndex,
   );
-  //  console.log('+++++++', JSON.stringify(Array.from(reusableKeyMap.values())));
 
   // Browsers have native size limits for elements (eg Chrome 33M pixels, IE 1.5M pixes).
   // User cannot scroll beyond these size limitations.
@@ -257,10 +245,8 @@ export default function defaultCellRangeRenderer({
     }
   }
 
-  // checkValuesUnique(renderedCells.map(cell => cell.key));
-
   renderedCells.sort((a, b) => {
-    return parseInt(b.key) - parseInt(a.key);
+    return parseInt(a.key) - parseInt(b.key);
   });
 
   return renderedCells;
