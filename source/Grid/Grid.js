@@ -1005,17 +1005,22 @@ class Grid extends React.PureComponent<Props, State> {
       this._resetStyleCache();
     }
 
-    // Reset max visible rows count when height changes
-    if (this.state.instanceProps.prevHeight !== this.props.height) {
-      this._maxRenderedRowCount = 0;
-      this.state.instanceProps.prevHeight = this.props.height;
-    }
-
-    // Reset max visible columns count when width changes
-    if (this.state.instanceProps.prevWidth !== this.props.width) {
-      this._maxRenderedColumnCount = 0;
-      this.state.instanceProps.prevWidth = this.props.width;
-    }
+    let visibleColumnIndices = instanceProps.columnSizeAndPositionManager.getVisibleCellRange(
+      {
+        containerSize: width,
+        offset: 0,
+      },
+    );
+    this._maxRenderedColumnCount =
+      visibleColumnIndices.stop - visibleColumnIndices.start + 1;
+    let visibleRowIndices = instanceProps.rowSizeAndPositionManager.getVisibleCellRange(
+      {
+        containerSize: height,
+        offset: 0,
+      },
+    );
+    this._maxRenderedRowCount =
+      visibleRowIndices.stop - visibleRowIndices.start + 1;
 
     // calculate children to render here
     this._calculateChildrenToRender(this.props, this.state);
@@ -1144,6 +1149,9 @@ class Grid extends React.PureComponent<Props, State> {
 
       // Adjust rows/columns count for max values within visible area
       this.adjustForOverlapping(visibleColumnIndices, visibleRowIndices);
+      console.log(
+        'Rows: ' + (visibleRowIndices.stop - visibleRowIndices.start),
+      );
 
       const horizontalOffsetAdjustment = instanceProps.columnSizeAndPositionManager.getOffsetAdjustment(
         {
@@ -1271,11 +1279,6 @@ class Grid extends React.PureComponent<Props, State> {
   }
 
   adjustForOverlapping(visibleColumnIndices, visibleRowIndices) {
-    // Max columns within visible area is always plus 1 (Overlapping)
-    if (this._maxRenderedColumnCount == 0) {
-      this._maxRenderedColumnCount =
-        visibleColumnIndices.stop - visibleColumnIndices.start + 1;
-    }
     if (
       this._maxRenderedColumnCount !=
       visibleColumnIndices.stop - visibleColumnIndices.start
@@ -1283,11 +1286,7 @@ class Grid extends React.PureComponent<Props, State> {
       if (visibleColumnIndices.start > 0) visibleColumnIndices.start--;
       else visibleColumnIndices.stop++;
     }
-    // Max rows within visible area is always plus 1 (Overlapping)
-    if (this._maxRenderedRowCount == 0) {
-      this._maxRenderedRowCount =
-        visibleRowIndices.stop - visibleRowIndices.start + 1;
-    }
+
     if (
       this._maxRenderedRowCount !=
       visibleRowIndices.stop - visibleRowIndices.start
