@@ -136,6 +136,7 @@ export default function defaultCellRangeRenderer({
     rowSizeAndPositionManager.areOffsetsAdjusted();
 
   const canCacheStyle = !isScrolling && !areOffsetsAdjusted;
+  let dataOrder = 0;
 
   for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
     let rowDatum = rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
@@ -198,6 +199,7 @@ export default function defaultCellRangeRenderer({
         parent,
         rowIndex,
         style,
+        dataOrder: dataOrder++,
       };
 
       let renderedCell;
