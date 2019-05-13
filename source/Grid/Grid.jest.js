@@ -2137,10 +2137,10 @@ describe('Grid', () => {
       );
       expect(
         grid.state.instanceProps.columnSizeAndPositionManager.getTotalSize(),
-      ).toEqual(1500);
+      ).toEqual(1450);
       expect(
         grid.state.instanceProps.rowSizeAndPositionManager.getTotalSize(),
-      ).toEqual(150);
+      ).toEqual(155);
       grid.measureAllCells();
       expect(
         grid.state.instanceProps.columnSizeAndPositionManager.getTotalSize(),

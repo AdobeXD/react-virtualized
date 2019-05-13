@@ -1149,9 +1149,6 @@ class Grid extends React.PureComponent<Props, State> {
 
       // Adjust rows/columns count for max values within visible area
       this.adjustForOverlapping(visibleColumnIndices, visibleRowIndices);
-      console.log(
-        'Rows: ' + (visibleRowIndices.stop - visibleRowIndices.start),
-      );
 
       const horizontalOffsetAdjustment = instanceProps.columnSizeAndPositionManager.getOffsetAdjustment(
         {
