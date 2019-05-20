@@ -215,6 +215,7 @@ export default class List extends React.PureComponent<Props> {
     isScrolling,
     isVisible,
     key,
+    dataOrder,
   }: CellRendererParams) => {
     const {rowRenderer} = this.props;
 
@@ -237,6 +238,7 @@ export default class List extends React.PureComponent<Props> {
       isVisible,
       key,
       parent,
+      dataOrder,
     });
   };
 

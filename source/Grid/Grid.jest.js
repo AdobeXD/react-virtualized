@@ -1345,11 +1345,11 @@ describe('Grid', () => {
           scrollToRow: 50,
         }),
       );
-      expect(helper.columnOverscanStartIndex()).toEqual(19);
+      expect(helper.columnOverscanStartIndex()).toEqual(21);
       expect(helper.columnOverscanStopIndex()).toEqual(27);
       expect(helper.columnStartIndex()).toEqual(21);
       expect(helper.columnStopIndex()).toEqual(25);
-      expect(helper.rowOverscanStartIndex()).toEqual(40);
+      expect(helper.rowOverscanStartIndex()).toEqual(45);
       expect(helper.rowOverscanStopIndex()).toEqual(55);
       expect(helper.rowStartIndex()).toEqual(45);
       expect(helper.rowStopIndex()).toEqual(50);
@@ -1558,11 +1558,11 @@ describe('Grid', () => {
       await onSectionRenderedPromise;
 
       // It should overscan in the direction being scrolled while scroll is in progress
-      expect(helper.columnOverscanStartIndex()).toEqual(1);
+      expect(helper.columnOverscanStartIndex()).toEqual(3);
       expect(helper.columnOverscanStopIndex()).toEqual(9);
       expect(helper.columnStartIndex()).toEqual(3);
       expect(helper.columnStopIndex()).toEqual(7);
-      expect(helper.rowOverscanStartIndex()).toEqual(4);
+      expect(helper.rowOverscanStartIndex()).toEqual(9);
       expect(helper.rowOverscanStopIndex()).toEqual(19);
       expect(helper.rowStartIndex()).toEqual(9);
       expect(helper.rowStopIndex()).toEqual(14);
@@ -1582,11 +1582,11 @@ describe('Grid', () => {
 
       // It reset overscan once scrolling has finished
       expect(helper.columnOverscanStartIndex()).toEqual(0);
-      expect(helper.columnOverscanStopIndex()).toEqual(7);
+      expect(helper.columnOverscanStopIndex()).toEqual(5);
       expect(helper.columnStartIndex()).toEqual(1);
       expect(helper.columnStopIndex()).toEqual(5);
       expect(helper.rowOverscanStartIndex()).toEqual(0);
-      expect(helper.rowOverscanStopIndex()).toEqual(14);
+      expect(helper.rowOverscanStopIndex()).toEqual(9);
       expect(helper.rowStartIndex()).toEqual(4);
       expect(helper.rowStopIndex()).toEqual(9);
 
@@ -2137,10 +2137,10 @@ describe('Grid', () => {
       );
       expect(
         grid.state.instanceProps.columnSizeAndPositionManager.getTotalSize(),
-      ).toEqual(1500);
+      ).toEqual(1450);
       expect(
         grid.state.instanceProps.rowSizeAndPositionManager.getTotalSize(),
-      ).toEqual(150);
+      ).toEqual(155);
       grid.measureAllCells();
       expect(
         grid.state.instanceProps.columnSizeAndPositionManager.getTotalSize(),

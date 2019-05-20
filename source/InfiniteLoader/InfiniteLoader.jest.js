@@ -91,6 +91,7 @@ describe('InfiniteLoader', () => {
       12,
       13,
       14,
+      15,
     ]);
   });
 
@@ -101,7 +102,7 @@ describe('InfiniteLoader', () => {
 
   it('should call :loadMoreRows for unloaded rows within the threshold', () => {
     render(getMarkup());
-    expect(loadMoreRowsCalls).toEqual([{startIndex: 0, stopIndex: 14}]);
+    expect(loadMoreRowsCalls).toEqual([{startIndex: 0, stopIndex: 15}]);
   });
 
   it('should call :loadMoreRows for unloaded rows within the rowCount', () => {
@@ -180,7 +181,7 @@ describe('InfiniteLoader', () => {
         }),
       );
       expect(loadMoreRowsCalls.length).toEqual(1);
-      expect(loadMoreRowsCalls).toEqual([{startIndex: 0, stopIndex: 14}]);
+      expect(loadMoreRowsCalls).toEqual([{startIndex: 0, stopIndex: 15}]);
     });
 
     it('should respect the specified :minimumBatchSize if a user scrolls past the previous range', () => {
