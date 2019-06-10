@@ -15,6 +15,8 @@ Just follow these steps
 - run ```yarn add @adobe/react-virtualized```
 - change your require("react-virtualized") expressions to require("@adobe/react-virtualized")
 - make sure you use the "key" parameter provided to your rowRenderer function for each row
+- because of dom recycling cell components are mounted only once so clean cells in `componentWillUpdate` and/or `componentDidUpdate` before resuing them.
+- dom recycling also results in different the visual order & dom order but you can use "dataOrder" parameter to set as a custom attribute on cells and use it to reterieve the visual order
 
 ## Changes
 
