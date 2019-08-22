@@ -428,7 +428,7 @@ describe('List', () => {
       );
       expect(
         rendered.Grid.state.instanceProps.rowSizeAndPositionManager.getTotalSize(),
-      ).toEqual(150);
+      ).toEqual(155);
       rendered.measureAllRows();
       expect(
         rendered.Grid.state.instanceProps.rowSizeAndPositionManager.getTotalSize(),
@@ -521,7 +521,7 @@ describe('List', () => {
       ),
     );
     expect(rowRendererCalls[0].isVisible).toEqual(true);
-    expect(rowRendererCalls[1].isVisible).toEqual(false);
+    expect(rowRendererCalls[1].isVisible).toEqual(true);
   });
 
   it('should relay the Grid :parent param to the :rowRenderer', () => {

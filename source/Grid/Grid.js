@@ -1244,6 +1244,14 @@ class Grid extends React.PureComponent<Props, State> {
         }
       }
 
+      const overscanRows =
+        rowStartIndex == 0 ? 0 : rowStartIndex - this._renderedRowStartIndex;
+      const overScanCols =
+        columnStartIndex == 0
+          ? columnStopIndex + 1
+          : columnStopIndex - columnStartIndex;
+      const overscanCellCount = overscanRows * overScanCols;
+
       this._childrenToDisplay = cellRangeRenderer({
         cellCache: this._cellCache,
         cellRenderer,
@@ -1265,6 +1273,7 @@ class Grid extends React.PureComponent<Props, State> {
         verticalOffsetAdjustment,
         visibleColumnIndices,
         visibleRowIndices,
+        overscanCellCount: overscanCellCount,
       });
 
       // update the indices
