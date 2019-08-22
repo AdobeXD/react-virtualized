@@ -115,6 +115,7 @@ export default function defaultCellRangeRenderer({
   verticalOffsetAdjustment,
   visibleColumnIndices,
   visibleRowIndices,
+  overscanCellCount,
 }: CellRangeRendererParams) {
   const renderedCells = [];
 
@@ -136,7 +137,7 @@ export default function defaultCellRangeRenderer({
     rowSizeAndPositionManager.areOffsetsAdjusted();
 
   const canCacheStyle = !isScrolling && !areOffsetsAdjusted;
-  let dataOrder = 0;
+  let dataOrder = overscanCellCount;
 
   for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
     let rowDatum = rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
