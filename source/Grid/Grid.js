@@ -1245,7 +1245,9 @@ class Grid extends React.PureComponent<Props, State> {
       }
 
       const overscanRows =
-        rowStartIndex == 0 ? 0 : rowStartIndex - this._renderedRowStartIndex;
+        this._renderedRowStartIndex == 0
+          ? 0
+          : rowStartIndex - this._renderedRowStartIndex;
       const overScanCols =
         columnStartIndex == 0
           ? columnStopIndex + 1
